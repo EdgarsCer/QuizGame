@@ -65,7 +65,7 @@ function buildQuestion() {
         allDone = true
     }
 }
-let totalScore
+let totalScore = 0
 // this makes time and number
 let time = document.getElementById("time").innerHTML
 // this will remove 1 per second from time ID  and will start when we press start
@@ -78,15 +78,41 @@ document.getElementById("start").addEventListener("click", function () {
         document.getElementById("time").innerHTML = time;
         if (allDone || time === 0) {
             clearInterval(timer);
-            // totalScore = time;
+            totalScore = time;
             document.getElementById("final-score").innerText = time;
-            document.getElementById("questions").className = "hide"
-            document.getElementById("end-screen").classList.remove("hide")
+            document.getElementById("questions").className = "hide";
+            document.getElementById("end-screen").classList.remove("hide");
         }
     }, 1000)
 
 })
-// localStorage.setItem("finalScore", totalScore);
-// document.getElementById("final-score").innerText = totalScore;
 
+// let userInitials = document.querySelector("#initials").value;
+// let userScore = document.querySelector("#final-score").value;
+// document.getElementById("submit").addEventListener("click", function (){
+//     localStorage.setItem("initials", userInitials.value);
+//     localStorage.setItem("final-score", userScore);
+//     console.log(userInitials)
+// });
+let score = {};
+document.getElementById("submit").addEventListener("click", function(){
+    //function to save totalScore and initials to local storage
+    function saveScore() {
+        // get initials from user input
+        // create object to store initials and score
+    let userInitials = document.getElementById("initials").value;
+    console.log(userInitials)
+    let score = {
+        initials: userInitials,
+        score: totalScore
+    }
+    highScores.push(score);
+    // get scores from local storage
+    let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
+    // add new score to highScores array
+    // save highScores array to local storage
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+    // redirect to highscores page
+    window.location.href = "highscores.html";
 
+}})
