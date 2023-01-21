@@ -16,10 +16,30 @@ let currentQuestion = 0;
 let questionTitleEl = document.querySelector("#question-title");
 let choicesEl = document.querySelector("#choices")
 // reacts to start button being pressed ! 
-document.getElementById("start").addEventListener("click", function () {
-    buildQuestion()
-})
+// document.getElementById("start").addEventListener("click",buildQuestion())
+
 let = allDone = false
+// this makes time and number
+let time = document.getElementById("time").innerHTML
+// this will remove 1 per second from time ID  and will start when we press start
+document.getElementById("start").addEventListener("click", startQuiz());
+function startQuiz(){
+    document.getElementById("start-screen").className = "hide"
+    document.getElementById("questions").classList.remove("hide")
+
+    timer = setInterval(function () {
+        time--;
+        document.getElementById("time").innerHTML = time;
+        if (allDone || time === 0) {
+            clearInterval(timer);
+            totalScore = time;
+            document.getElementById("final-score").innerText = time;
+            document.getElementById("questions").className = "hide";
+            document.getElementById("end-screen").classList.remove("hide");
+        }
+    }, 1000)
+buildQuestion()
+}
 function buildQuestion() {
     if (currentQuestion < questions.length) {
         // Clear any existing choices
@@ -66,27 +86,34 @@ function buildQuestion() {
     }
 }
 let totalScore = 0
-// this makes time and number
-let time = document.getElementById("time").innerHTML
-// this will remove 1 per second from time ID  and will start when we press start
-document.getElementById("start").addEventListener("click", function () {
-    document.getElementById("start-screen").className = "hide"
-    document.getElementById("questions").classList.remove("hide")
 
-    timer = setInterval(function () {
-        time--;
-        document.getElementById("time").innerHTML = time;
-        if (allDone || time === 0) {
-            clearInterval(timer);
-            totalScore = time;
-            document.getElementById("final-score").innerText = time;
-            document.getElementById("questions").className = "hide";
-            document.getElementById("end-screen").classList.remove("hide");
-        }
-    }, 1000)
-
-})
-
+let userInitials = document.getElementById("initials").value.trim();
+document.getElementById("submit").addEventListener("click", saveScore())
+    //function to save totalScore and initials to local storage
+    function saveScore() {
+        // get initials from user input
+        // create object to store initials and score
+    // get scores from local storage
+    let highScores = JSON.parse(localStorage.getItem("highScores")) || [] ;
+    console.log(userInitials)
+    let score = {
+        initials: userInitials,
+        score: totalScore
+    }
+    highScores.push(score);
+    // add new score to highScores array
+    // save highScores array to local storage
+    localStorage.setItem("highScores", JSON.stringify(highScores));
+    // redirect to highscores page
+    window.location.href = "highscores.html";
+}
+function checkForEnter(event) {
+    // "13" represents the enter key
+    if (event.key === "Enter") {
+      saveScore();
+    }
+  }
+  userInitials.onkeyup = checkForEnter;
 // let userInitials = document.querySelector("#initials").value;
 // let userScore = document.querySelector("#final-score").value;
 // document.getElementById("submit").addEventListener("click", function (){
@@ -94,25 +121,4 @@ document.getElementById("start").addEventListener("click", function () {
 //     localStorage.setItem("final-score", userScore);
 //     console.log(userInitials)
 // });
-let score = {};
-document.getElementById("submit").addEventListener("click", function(){
-    //function to save totalScore and initials to local storage
-    function saveScore() {
-        // get initials from user input
-        // create object to store initials and score
-    let userInitials = document.getElementById("initials").value;
-    console.log(userInitials)
-    let score = {
-        initials: userInitials,
-        score: totalScore
-    }
-    highScores.push(score);
-    // get scores from local storage
-    let highScores = JSON.parse(localStorage.getItem("highScores")) || [];
-    // add new score to highScores array
-    // save highScores array to local storage
-    localStorage.setItem("highScores", JSON.stringify(highScores));
-    // redirect to highscores page
-    window.location.href = "highscores.html";
-
-}})
+// let score = {};
